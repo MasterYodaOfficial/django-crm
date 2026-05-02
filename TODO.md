@@ -11,12 +11,12 @@
 
 ## Этап 1. Доменные приложения и модели
 
-- [ ] Создать приложения: `common`, `products`, `advertisements`, `leads`, `customers`, `contracts`.
-- [ ] Реализовать модели `Product`, `Advertisement`, `Lead`, `Customer`, `Contract`.
-- [ ] Добавить `created_at` / `updated_at`.
-- [ ] Добавить `TextChoices` для каналов рекламы.
-- [ ] Добавить ограничения и индексы.
-- [ ] Подготовить и прогнать миграции.
+- [x] Создать приложения: `common`, `products`, `advertisements`, `leads`, `customers`, `contracts`.
+- [x] Реализовать модели `Product`, `Advertisement`, `Lead`, `Customer`, `Contract`.
+- [x] Добавить `created_at` / `updated_at`.
+- [x] Добавить `TextChoices` для каналов рекламы.
+- [x] Добавить ограничения и индексы.
+- [x] Подготовить и прогнать миграции.
 
 ## Этап 2. Админка, роли и permissions
 

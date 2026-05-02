@@ -1,0 +1,1 @@
+"""Contracts migrations package."""
