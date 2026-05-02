@@ -20,13 +20,13 @@
 
 ## Этап 2. Админка, роли и permissions
 
-- [ ] Настроить Django admin для доменных сущностей.
-- [ ] Добавить data migration или management command для групп:
-  - [ ] `Operator`
-  - [ ] `Marketer`
-  - [ ] `Manager`
-- [ ] Назначить группам model permissions.
-- [ ] Настроить удобное отображение пользователей, групп и прав в admin.
+- [x] Настроить Django admin для доменных сущностей.
+- [x] Добавить data migration или management command для групп:
+  - [x] `Operator`
+  - [x] `Marketer`
+  - [x] `Manager`
+- [x] Назначить группам model permissions.
+- [x] Настроить удобное отображение пользователей, групп и прав в admin.
 
 ## Этап 3. Аутентификация и базовая навигация
 
@@ -120,7 +120,7 @@
 - [ ] Подготовить `compose.db.yml` для локальной PostgreSQL.
 - [ ] Настроить запуск с внешней БД только через `DATABASE_URL`.
 - [ ] Оставить fallback на SQLite только для локального запуска без Docker.
-- [ ] Подготовить `.env.example`.
+- [x] Подготовить `.env.example`.
 
 ## Этап 12. CI/CD и Docker Hub
 

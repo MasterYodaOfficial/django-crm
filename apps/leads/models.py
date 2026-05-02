@@ -44,6 +44,12 @@ class Lead(TimeStampedModel):
         ordering = ['last_name', 'first_name', 'pk']
         verbose_name = 'Lead'
         verbose_name_plural = 'Leads'
+        permissions = [
+            (
+                'convert_lead',
+                'Can convert lead to active customer',
+            ),
+        ]
         indexes = [
             models.Index(fields=['phone'], name='leads_phone_idx'),
             models.Index(fields=['email'], name='leads_email_idx'),

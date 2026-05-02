@@ -65,6 +65,12 @@ class Advertisement(TimeStampedModel):
         ordering = ['name']
         verbose_name = 'Advertisement'
         verbose_name_plural = 'Advertisements'
+        permissions = [
+            (
+                'view_advertisement_statistics',
+                'Can view advertisement statistics',
+            ),
+        ]
         constraints = [
             models.CheckConstraint(
                 condition=Q(end_date__isnull=True)
