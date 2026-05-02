@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}CRM{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="{% static 'style.css' %}" rel="stylesheet">
+</head>
+<body>
+<div class="app-shell d-flex">
+    <aside class="sidebar border-end">
+        <div class="sidebar-header px-4 py-4 border-bottom">
+            <a class="brand-link text-decoration-none" href="{% url 'common:home' %}">
+                <span class="brand-mark"><i class="fa-solid fa-chart-line"></i></span>
+                <span>CRM Backoffice</span>
+            </a>
+        </div>
+        <nav class="sidebar-nav px-3 py-4">
+            <ul class="nav flex-column gap-1">
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link {% if request.resolver_match.view_name == 'common:home' %}active{% endif %}" href="{% url 'common:home' %}">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Главная</span>
+                    </a>
+                </li>
+                {% if perms.products.view_product %}
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link {% if request.resolver_match.namespace == 'products' %}active{% endif %}" href="{% url 'products:list' %}">
+                        <i class="fa-solid fa-box"></i>
+                        <span>Услуги</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.advertisements.view_advertisement %}
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link {% if request.resolver_match.namespace == 'advertisements' and request.resolver_match.url_name == 'list' %}active{% endif %}" href="{% url 'advertisements:list' %}">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <span>Рекламные кампании</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.leads.view_lead %}
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link {% if request.resolver_match.namespace == 'leads' %}active{% endif %}" href="{% url 'leads:list' %}">
+                        <i class="fa-solid fa-user-clock"></i>
+                        <span>Лиды</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.customers.view_customer %}
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link {% if request.resolver_match.namespace == 'customers' %}active{% endif %}" href="{% url 'customers:list' %}">
+                        <i class="fa-solid fa-user-check"></i>
+                        <span>Активные клиенты</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.contracts.view_contract %}
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link {% if request.resolver_match.namespace == 'contracts' %}active{% endif %}" href="{% url 'contracts:list' %}">
+                        <i class="fa-solid fa-file-signature"></i>
+                        <span>Контракты</span>
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.advertisements.view_advertisement_statistics %}
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link {% if request.resolver_match.namespace == 'advertisements' and request.resolver_match.url_name == 'statistics' %}active{% endif %}" href="{% url 'advertisements:statistics' %}">
+                        <i class="fa-solid fa-chart-column"></i>
+                        <span>Статистика</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <div class="sidebar-footer mt-auto px-3 py-3 border-top">
+            <a class="nav-link sidebar-link" href="{% url 'admin:index' %}">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Админка</span>
+            </a>
+            <form action="{% url 'logout' %}" method="post" class="mt-2">
+                {% csrf_token %}
+                <button class="btn btn-outline-secondary w-100" type="submit">
+                    <i class="fa-solid fa-right-from-bracket me-2"></i>Выход
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <main class="content-panel flex-grow-1">
+        <header class="content-header border-bottom px-4 px-lg-5 py-3">
+            <div>
+                <h1 class="page-title mb-1">{% block page_title %}{{ page_title|default:"CRM" }}{% endblock %}</h1>
+                <p class="page-subtitle mb-0 text-body-secondary">
+                    {% block page_subtitle %}{{ page_description|default:"Рабочее пространство CRM." }}{% endblock %}
+                </p>
+            </div>
+            <div class="text-end">
+                <div class="fw-semibold">{{ request.user.get_full_name|default:request.user.username }}</div>
+                <div class="small text-body-secondary">Авторизованный пользователь</div>
+            </div>
+        </header>
+
+        <section class="px-4 px-lg-5 py-4">
+            {% if messages %}
+            <div class="mb-4">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} mb-2" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
