@@ -1,0 +1,73 @@
+[project]
+name = "django-crm"
+version = "0.1.0"
+description = "CRM system for managing services, ads, leads, customers, and contracts."
+requires-python = ">=3.13"
+dependencies = [
+    "django==5.2.13",
+    "django-environ",
+    "gunicorn",
+    "psycopg[binary]",
+    "whitenoise",
+]
+
+[dependency-groups]
+dev = [
+    "django-stubs[compatible-mypy]==5.2.9",
+    "mypy==1.19.1",
+    "pylint==4.0.0",
+    "pylint-django==2.7.0",
+    "pytest==9.0.3",
+    "pytest-django==4.12.0",
+    "ruff==0.15.9",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "django_crm.settings.test"
+pythonpath = ["."]
+testpaths = ["tests", "apps"]
+python_files = ["test_*.py", "*_tests.py", "tests.py"]
+addopts = "-ra --strict-markers"
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+exclude = [
+    ".git",
+    ".idea",
+    ".venv",
+    "docs_private",
+    "**/migrations/*",
+]
+
+[tool.ruff.lint]
+select = [
+    "B",
+    "E",
+    "F",
+    "I",
+    "UP",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"django_crm/settings/*.py" = ["I001"]
+
+[tool.mypy]
+python_version = "3.13"
+plugins = ["mypy_django_plugin.main"]
+files = ["apps", "django_crm", "manage.py", "tests"]
+exclude = '(^\.venv/|^docs_private/|^.*/migrations/)'
+check_untyped_defs = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["django.*", "environ", "environ.*"]
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "django_crm.settings.local"

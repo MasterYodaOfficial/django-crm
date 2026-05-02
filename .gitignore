@@ -1,0 +1,16 @@
+/.venv/
+/docs_private/
+/.idea/
+.env
+__pycache__/
+*.py[cod]
+db.sqlite3
+/staticfiles/*
+!/staticfiles/.gitkeep
+/media/*
+!/media/.gitkeep
+/.pytest_cache/
+/.mypy_cache/
+/.ruff_cache/
+/test_media/
+test.sqlite3

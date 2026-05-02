@@ -1,0 +1,18 @@
+[MASTER]
+ignore=.git,.idea,.venv,docs_private
+ignore-patterns=.*/migrations/.*
+load-plugins=pylint_django
+django-settings-module=django_crm.settings.local
+
+[MESSAGES CONTROL]
+disable=
+    missing-module-docstring,
+    missing-class-docstring,
+    missing-function-docstring,
+    too-few-public-methods
+
+[FORMAT]
+max-line-length=100
+
+[DESIGN]
+max-args=8
