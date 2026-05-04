@@ -21,4 +21,22 @@ class Customer(TimeStampedModel):
         verbose_name_plural = 'Customers'
 
     def __str__(self) -> str:
-        return f'Customer: {self.lead}'
+        return f'Customer: {self.full_name}'
+
+    @property
+    def full_name(self) -> str:
+        """Return the linked lead full name."""
+
+        return self.lead.full_name
+
+    @property
+    def phone(self) -> str:
+        """Expose customer phone through the linked lead."""
+
+        return self.lead.phone
+
+    @property
+    def email(self) -> str:
+        """Expose customer email through the linked lead."""
+
+        return self.lead.email

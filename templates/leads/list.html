@@ -55,6 +55,15 @@
                         <a class="btn btn-sm btn-outline-secondary" href="{% url 'leads:detail' item.pk %}">
                             Открыть
                         </a>
+                        {% if not item.converted_at and perms.leads.convert_lead %}
+                        <a class="btn btn-sm btn-dark" href="{% url 'leads:convert' item.pk %}">
+                            Конвертировать
+                        </a>
+                        {% elif item.converted_at and perms.customers.view_customer %}
+                        <a class="btn btn-sm btn-dark" href="{% url 'customers:detail' item.customer.pk %}">
+                            Клиент
+                        </a>
+                        {% endif %}
                         {% if perms.leads.change_lead %}
                         <a class="btn btn-sm btn-outline-dark" href="{% url 'leads:edit' item.pk %}">
                             Изменить

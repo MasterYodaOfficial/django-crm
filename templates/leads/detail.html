@@ -13,6 +13,15 @@
             <a class="btn btn-outline-secondary" href="{% url 'leads:list' %}">
                 <i class="fa-solid fa-arrow-left me-2"></i>К списку
             </a>
+            {% if not object.converted_at and perms.leads.convert_lead %}
+            <a class="btn btn-dark" href="{% url 'leads:convert' object.pk %}">
+                <i class="fa-solid fa-user-check me-2"></i>Конвертировать
+            </a>
+            {% elif object.converted_at and perms.customers.view_customer %}
+            <a class="btn btn-dark" href="{% url 'customers:detail' object.customer.pk %}">
+                <i class="fa-solid fa-user-check me-2"></i>Открыть клиента
+            </a>
+            {% endif %}
             {% if perms.leads.change_lead %}
             <a class="btn btn-dark" href="{% url 'leads:edit' object.pk %}">
                 <i class="fa-solid fa-pen-to-square me-2"></i>Редактировать

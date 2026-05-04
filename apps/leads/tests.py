@@ -158,3 +158,23 @@ class LeadCrudTests(TestCase):
         response = self.client.get(reverse('leads:edit', kwargs={'pk': lead.pk}))
 
         self.assertEqual(response.status_code, 403)
+
+    def test_convert_action_is_visible_for_unconverted_lead(self) -> None:
+        """Lead detail should expose a conversion action when permitted."""
+
+        advertisement = self._create_advertisement()
+        lead = Lead.objects.create(
+            last_name='Сидоров',
+            first_name='Сидор',
+            phone='+79990000000',
+            email='sidorov@example.com',
+            advertisement=advertisement,
+        )
+        user = User.objects.create_user(username='manager', password='password123')
+        self._grant_permissions(user, 'view_lead', 'convert_lead')
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('leads:detail', kwargs={'pk': lead.pk}))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, reverse('leads:convert', kwargs={'pk': lead.pk}))
