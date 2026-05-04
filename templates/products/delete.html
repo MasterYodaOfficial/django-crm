@@ -1,0 +1,52 @@
+{% extends "_base.html" %}
+
+{% block title %}Удаление {{ object.name }} | CRM{% endblock %}
+
+{% block content %}
+<div class="content-card shadow-sm">
+    <div class="toolbar mb-4">
+        <div>
+            <h2 class="section-title mb-1">Удаление услуги</h2>
+            <p class="text-body-secondary mb-0">Проверьте, что действительно хотите удалить выбранную услугу.</p>
+        </div>
+        <a class="btn btn-outline-secondary" href="{% url 'products:detail' object.pk %}">
+            <i class="fa-solid fa-arrow-left me-2"></i>Назад
+        </a>
+    </div>
+
+    <div class="alert alert-warning" role="alert">
+        Услуга <strong>{{ object.name }}</strong> будет удалена. Это действие нельзя отменить.
+    </div>
+
+    <dl class="summary-list mb-4">
+        <div>
+            <dt>Название</dt>
+            <dd>{{ object.name }}</dd>
+        </div>
+        <div>
+            <dt>Стоимость</dt>
+            <dd>{{ object.price }}</dd>
+        </div>
+        <div>
+            <dt>Статус</dt>
+            <dd>
+                {% if object.is_active %}
+                Активна
+                {% else %}
+                Неактивна
+                {% endif %}
+            </dd>
+        </div>
+    </dl>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button class="btn btn-danger" type="submit">
+                <i class="fa-solid fa-trash me-2"></i>Удалить
+            </button>
+            <a class="btn btn-outline-secondary" href="{% url 'products:detail' object.pk %}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

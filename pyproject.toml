@@ -27,7 +27,7 @@ DJANGO_SETTINGS_MODULE = "django_crm.settings.test"
 pythonpath = ["."]
 testpaths = ["tests", "apps"]
 python_files = ["test_*.py", "*_tests.py", "tests.py"]
-addopts = "-ra --strict-markers"
+addopts = "-ra --strict-markers --ds=django_crm.settings.test"
 
 [tool.ruff]
 target-version = "py313"
