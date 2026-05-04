@@ -1,6 +1,7 @@
 """Domain models for customer contracts."""
 
 from decimal import Decimal
+from pathlib import Path
 
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -59,3 +60,9 @@ class Contract(TimeStampedModel):
 
     def __str__(self) -> str:
         return self.name
+
+    @property
+    def document_filename(self) -> str:
+        """Return only the file name part of the uploaded document."""
+
+        return Path(self.document.name).name

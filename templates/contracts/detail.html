@@ -1,0 +1,68 @@
+{% extends "_base.html" %}
+
+{% block title %}{{ object.name }} | CRM{% endblock %}
+
+{% block content %}
+<div class="content-card shadow-sm">
+    <div class="toolbar mb-4">
+        <div>
+            <h2 class="section-title mb-1">{{ object.name }}</h2>
+            <p class="text-body-secondary mb-0">Карточка контракта, финансовые условия и загруженный документ.</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-outline-secondary" href="{% url 'contracts:list' %}">
+                <i class="fa-solid fa-arrow-left me-2"></i>К списку
+            </a>
+            {% if perms.contracts.change_contract %}
+            <a class="btn btn-dark" href="{% url 'contracts:edit' object.pk %}">
+                <i class="fa-solid fa-pen-to-square me-2"></i>Редактировать
+            </a>
+            {% endif %}
+            {% if perms.contracts.delete_contract %}
+            <a class="btn btn-outline-danger" href="{% url 'contracts:delete' object.pk %}">
+                <i class="fa-solid fa-trash me-2"></i>Удалить
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <div class="detail-item">
+            <div class="detail-label">Название</div>
+            <div class="detail-value">{{ object.name }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Клиент</div>
+            <div class="detail-value">
+                <a class="text-decoration-none link-dark" href="{% url 'customers:detail' object.customer.pk %}">
+                    {{ object.customer.full_name }}
+                </a>
+            </div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Услуга</div>
+            <div class="detail-value">{{ object.product.name }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Сумма</div>
+            <div class="detail-value">{{ object.amount }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Дата подписания</div>
+            <div class="detail-value">{{ object.signed_at|date:"d.m.Y" }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Действует до</div>
+            <div class="detail-value">{{ object.valid_until|date:"d.m.Y" }}</div>
+        </div>
+        <div class="detail-item detail-item-wide">
+            <div class="detail-label">Документ</div>
+            <div class="detail-value">
+                <a class="btn btn-outline-secondary" href="{{ object.document.url }}" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-solid fa-file-arrow-down me-2"></i>{{ object.document_filename }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

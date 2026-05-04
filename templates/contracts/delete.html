@@ -1,0 +1,50 @@
+{% extends "_base.html" %}
+
+{% block title %}Удаление {{ object.name }} | CRM{% endblock %}
+
+{% block content %}
+<div class="content-card shadow-sm">
+    <div class="toolbar mb-4">
+        <div>
+            <h2 class="section-title mb-1">Удаление контракта</h2>
+            <p class="text-body-secondary mb-0">Проверьте, что действительно хотите удалить выбранный контракт.</p>
+        </div>
+        <a class="btn btn-outline-secondary" href="{% url 'contracts:detail' object.pk %}">
+            <i class="fa-solid fa-arrow-left me-2"></i>Назад
+        </a>
+    </div>
+
+    <div class="alert alert-warning" role="alert">
+        Контракт <strong>{{ object.name }}</strong> будет удален. Загруженный документ тоже будет удален.
+    </div>
+
+    <dl class="summary-list mb-4">
+        <div>
+            <dt>Клиент</dt>
+            <dd>{{ object.customer.full_name }}</dd>
+        </div>
+        <div>
+            <dt>Услуга</dt>
+            <dd>{{ object.product.name }}</dd>
+        </div>
+        <div>
+            <dt>Сумма</dt>
+            <dd>{{ object.amount }}</dd>
+        </div>
+        <div>
+            <dt>Документ</dt>
+            <dd>{{ object.document_filename }}</dd>
+        </div>
+    </dl>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button class="btn btn-danger" type="submit">
+                <i class="fa-solid fa-trash me-2"></i>Удалить
+            </button>
+            <a class="btn btn-outline-secondary" href="{% url 'contracts:detail' object.pk %}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

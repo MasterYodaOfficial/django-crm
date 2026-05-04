@@ -13,6 +13,11 @@
             <a class="btn btn-outline-secondary" href="{% url 'customers:list' %}">
                 <i class="fa-solid fa-arrow-left me-2"></i>К списку
             </a>
+            {% if perms.contracts.add_contract %}
+            <a class="btn btn-dark" href="{% url 'contracts:create' %}?customer={{ object.pk }}">
+                <i class="fa-solid fa-file-circle-plus me-2"></i>Новый контракт
+            </a>
+            {% endif %}
             {% if perms.customers.change_customer %}
             <a class="btn btn-dark" href="{% url 'customers:edit' object.pk %}">
                 <i class="fa-solid fa-pen-to-square me-2"></i>Редактировать
@@ -67,7 +72,11 @@
             <tbody>
             {% for contract in object.contracts.all %}
             <tr>
-                <td class="fw-semibold">{{ contract.name }}</td>
+                <td class="fw-semibold">
+                    <a class="text-decoration-none link-dark" href="{% url 'contracts:detail' contract.pk %}">
+                        {{ contract.name }}
+                    </a>
+                </td>
                 <td>{{ contract.product.name }}</td>
                 <td>{{ contract.amount }}</td>
                 <td>{{ contract.signed_at|date:"d.m.Y" }}</td>
