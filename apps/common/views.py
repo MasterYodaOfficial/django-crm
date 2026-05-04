@@ -1,7 +1,7 @@
 """Views for shared application concerns."""
 
 from decimal import Decimal
-from typing import Any, Protocol, cast
+from typing import Protocol, TypedDict, cast
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
@@ -18,14 +18,28 @@ from apps.leads.models import Lead
 from apps.products.models import Product
 
 
-class AdvertisementStatisticsRow(Protocol):
-    """Typed shape of advertisement rows after ORM annotations."""
+class AdvertisementStatisticsSourceRow(Protocol):
+    """Typed shape of an advertisement row with ORM annotations."""
 
     budget: Decimal
     customers_count: int
     leads_count: int
     name: str
+    pk: int
     product: Product
+    revenue: Decimal
+
+
+class AdvertisementStatisticsAnnotatedRow(TypedDict):
+    """Typed shape of a prepared statistics row for templates."""
+
+    budget: Decimal
+    customers_count: int
+    efficiency_ratio: Decimal | None
+    leads_count: int
+    name: str
+    pk: int
+    product_name: str
     revenue: Decimal
 
 
@@ -102,16 +116,25 @@ class AdvertisementStatisticsView(LoginAndPermissionRequiredMixin, TemplateView)
         """Add statistics rows and summary counters to the template."""
 
         context = super().get_context_data(**kwargs)
-        advertisement_rows: list[dict[str, Any]] = []
+        advertisement_rows: list[AdvertisementStatisticsAnnotatedRow] = []
+        total_budget = Decimal('0.00')
+        total_revenue = Decimal('0.00')
+        total_leads = 0
+        total_customers = 0
         for advertisement in self.get_queryset():
-            stats_row = cast(AdvertisementStatisticsRow, advertisement)
+            stats_row = cast(AdvertisementStatisticsSourceRow, advertisement)
             budget = stats_row.budget
             revenue = stats_row.revenue
             leads_count = stats_row.leads_count
             customers_count = stats_row.customers_count
+            total_budget += budget
+            total_revenue += revenue
+            total_leads += leads_count
+            total_customers += customers_count
             advertisement_rows.append(
                 {
                     'name': stats_row.name,
+                    'pk': stats_row.pk,
                     'product_name': stats_row.product.name,
                     'budget': budget,
                     'leads_count': leads_count,
@@ -123,10 +146,11 @@ class AdvertisementStatisticsView(LoginAndPermissionRequiredMixin, TemplateView)
 
         context.update(
             page_title='Статистика рекламных кампаний',
+            page_description='Сводка по лидам, активным клиентам и выручке по каждой кампании.',
             advertisements=advertisement_rows,
-            total_leads=sum(cast(int, item['leads_count']) for item in advertisement_rows),
-            total_customers=sum(
-                cast(int, item['customers_count']) for item in advertisement_rows
-            ),
+            total_budget=total_budget,
+            total_revenue=total_revenue,
+            total_leads=total_leads,
+            total_customers=total_customers,
         )
         return context

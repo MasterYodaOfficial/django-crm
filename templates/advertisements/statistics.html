@@ -3,6 +3,16 @@
 {% block title %}Статистика | CRM{% endblock %}
 
 {% block content %}
+<div class="toolbar mb-4">
+    <div>
+        <h2 class="section-title mb-1">{{ page_title }}</h2>
+        <p class="text-body-secondary mb-0">{{ page_description }}</p>
+    </div>
+    <a class="btn btn-outline-secondary" href="{% url 'advertisements:list' %}">
+        <i class="fa-solid fa-arrow-left me-2"></i>К кампаниям
+    </a>
+</div>
+
 <div class="row g-4 mb-4">
     <div class="col-sm-6 col-xl-3">
         <div class="metric-card shadow-sm">
@@ -28,6 +38,17 @@
     </div>
     <div class="col-sm-6 col-xl-3">
         <div class="metric-card shadow-sm">
+            <div class="metric-icon bg-secondary-subtle text-secondary-emphasis">
+                <i class="fa-solid fa-wallet"></i>
+            </div>
+            <div>
+                <div class="metric-label">Бюджет</div>
+                <div class="metric-value">{{ total_budget }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="metric-card shadow-sm">
             <div class="metric-icon bg-success-subtle text-success-emphasis">
                 <i class="fa-solid fa-user-check"></i>
             </div>
@@ -37,11 +58,22 @@
             </div>
         </div>
     </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="metric-card shadow-sm">
+            <div class="metric-icon bg-dark-subtle text-dark-emphasis">
+                <i class="fa-solid fa-ruble-sign"></i>
+            </div>
+            <div>
+                <div class="metric-label">Выручка</div>
+                <div class="metric-value">{{ total_revenue }}</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="content-card shadow-sm">
     <div class="table-responsive">
-        <table class="table align-middle mb-0">
+        <table class="table align-middle product-table mb-0">
             <thead>
             <tr>
                 <th>Кампания</th>
@@ -56,7 +88,11 @@
             <tbody>
             {% for advertisement in advertisements %}
             <tr>
-                <td class="fw-medium">{{ advertisement.name }}</td>
+                <td class="fw-semibold">
+                    <a class="text-decoration-none link-dark" href="{% url 'advertisements:detail' advertisement.pk %}">
+                        {{ advertisement.name }}
+                    </a>
+                </td>
                 <td>{{ advertisement.product_name }}</td>
                 <td>{{ advertisement.budget }}</td>
                 <td>{{ advertisement.leads_count }}</td>
@@ -72,7 +108,9 @@
             </tr>
             {% empty %}
             <tr>
-                <td colspan="7" class="text-center py-5 text-body-secondary">Рекламные кампании пока отсутствуют.</td>
+                <td colspan="7" class="text-center py-5 text-body-secondary">
+                    Рекламные кампании пока отсутствуют.
+                </td>
             </tr>
             {% endfor %}
             </tbody>
