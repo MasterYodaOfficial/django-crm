@@ -1,0 +1,50 @@
+{% extends "_base.html" %}
+
+{% block title %}Удаление {{ object.full_name }} | CRM{% endblock %}
+
+{% block content %}
+<div class="content-card shadow-sm">
+    <div class="toolbar mb-4">
+        <div>
+            <h2 class="section-title mb-1">Удаление лида</h2>
+            <p class="text-body-secondary mb-0">Проверьте, что действительно хотите удалить выбранного потенциального клиента.</p>
+        </div>
+        <a class="btn btn-outline-secondary" href="{% url 'leads:detail' object.pk %}">
+            <i class="fa-solid fa-arrow-left me-2"></i>Назад
+        </a>
+    </div>
+
+    <div class="alert alert-warning" role="alert">
+        Лид <strong>{{ object.full_name }}</strong> будет удален. Это действие нельзя отменить.
+    </div>
+
+    <dl class="summary-list mb-4">
+        <div>
+            <dt>ФИО</dt>
+            <dd>{{ object.full_name }}</dd>
+        </div>
+        <div>
+            <dt>Телефон</dt>
+            <dd>{{ object.phone }}</dd>
+        </div>
+        <div>
+            <dt>Email</dt>
+            <dd>{{ object.email }}</dd>
+        </div>
+        <div>
+            <dt>Кампания</dt>
+            <dd>{{ object.advertisement.name }}</dd>
+        </div>
+    </dl>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button class="btn btn-danger" type="submit">
+                <i class="fa-solid fa-trash me-2"></i>Удалить
+            </button>
+            <a class="btn btn-outline-secondary" href="{% url 'leads:detail' object.pk %}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

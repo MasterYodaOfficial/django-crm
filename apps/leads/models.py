@@ -3,6 +3,7 @@
 from django.db import models
 
 from apps.common.models import TimeStampedModel
+from apps.leads.validators import validate_phone_number
 
 
 class Lead(TimeStampedModel):
@@ -23,6 +24,7 @@ class Lead(TimeStampedModel):
     )
     phone = models.CharField(
         max_length=32,
+        validators=[validate_phone_number],
         verbose_name='Phone',
     )
     email = models.EmailField(
@@ -56,4 +58,11 @@ class Lead(TimeStampedModel):
         ]
 
     def __str__(self) -> str:
-        return f'{self.last_name} {self.first_name}'.strip()
+        return self.full_name
+
+    @property
+    def full_name(self) -> str:
+        """Return the full name of the lead."""
+
+        name_parts = [self.last_name, self.first_name, self.middle_name]
+        return ' '.join(part for part in name_parts if part).strip()
