@@ -363,13 +363,13 @@ POSTGRES_PORT=5432
 1. Установка зависимостей.
 2. `pylint`.
 3. `pytest`.
-4. Сборка Docker image.
-5. Публикация в Docker Hub.
+4. Проверочная сборка Docker image.
+5. Публикация в Docker Hub на `master` и version tags.
 
 Рекомендуемая публикация:
 
-- по `main` -> тег `latest`;
-- по git tag -> семантический тег версии;
+- по `master` -> теги `latest` и `sha-<commit>`;
+- по git tag `v*` -> тег версии и `sha-<commit>`;
 - дополнительно тег по SHA.
 
 ## Что не делать на первом этапе

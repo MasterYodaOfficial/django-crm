@@ -108,6 +108,34 @@ uv run python manage.py createsuperuser
 - [Архитектура проекта](docs/architecture.md)
 - [План работ / roadmap](TODO.md)
 
+## 🔄 CI/CD и Docker Hub
+
+В репозитории настроены два контура GitHub Actions:
+
+- `PR checks` — линтеры, типизация, тесты для `dev` и `master`;
+- `Docker image` — проверочная сборка образа на `pull request` и `push`, публикация образа в Docker Hub на `master` и git tags вида `v*`.
+
+Для публикации образа нужно задать в настройках репозитория:
+
+- `Variables`
+  - `DOCKERHUB_USERNAME`
+  - `DOCKERHUB_REPOSITORY`
+- `Secrets`
+  - `DOCKERHUB_TOKEN`
+
+Логика тегов:
+
+- `push` в `master` -> публикуются `latest` и `sha-<commit>`;
+- `push` тега `v1.2.3` -> публикуются `v1.2.3` и `sha-<commit>`.
+
+Пример релиза:
+
+```bash
+git checkout master
+git tag v0.1.0
+git push origin master --tags
+```
+
 ## ✅ Контроль качества
 
 Локальные проверки:

@@ -126,11 +126,11 @@
 
 - [x] Настроить GitHub Actions для lint/test.
 - [x] Настроить PR-проверки для веток `dev` и `master`.
-- [ ] Настроить сборку Docker image.
-- [ ] Настроить логин в Docker Hub через secrets.
-- [ ] Настроить push образа на `master`.
-- [ ] Настроить push version tags.
-- [ ] Добавить README по локальному запуску и деплою.
+- [x] Настроить сборку Docker image.
+- [x] Настроить логин в Docker Hub через secrets.
+- [x] Настроить push образа на `master`.
+- [x] Настроить push version tags.
+- [x] Добавить README по локальному запуску и деплою.
 
 ## Этап 13. Перед сдачей / перед продом
 
