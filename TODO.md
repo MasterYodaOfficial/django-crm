@@ -114,12 +114,12 @@
 
 ## Этап 11. Docker и конфигурация БД
 
-- [ ] Собрать production-ready `Dockerfile`.
-- [ ] Добавить `entrypoint.sh`.
-- [ ] Подготовить `compose.yml` для приложения.
-- [ ] Подготовить `compose.db.yml` для локальной PostgreSQL.
-- [ ] Настроить запуск с внешней БД только через `DATABASE_URL`.
-- [ ] Оставить fallback на SQLite только для локального запуска без Docker.
+- [x] Собрать production-ready `Dockerfile`.
+- [x] Добавить `entrypoint.sh`.
+- [x] Подготовить `compose.yml` для приложения.
+- [x] Подготовить `compose.db.yml` для локальной PostgreSQL.
+- [x] Настроить запуск с внешней БД только через `DATABASE_URL`.
+- [x] Оставить fallback на SQLite только для локального запуска без Docker.
 - [x] Подготовить `.env.example`.
 
 ## Этап 12. CI/CD и Docker Hub

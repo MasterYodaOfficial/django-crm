@@ -60,6 +60,48 @@ uv run python manage.py runserver
 
 После запуска приложение доступно по адресу `http://127.0.0.1:8000/`.
 
+## 🐳 Docker
+
+Есть два рабочих режима.
+
+### 1. Только приложение + внешняя PostgreSQL
+
+В `.env` нужно задать рабочий `DATABASE_URL`, после чего:
+
+```bash
+docker compose up --build
+```
+
+Контейнер поднимет приложение, применит миграции, соберет статику и синхронизирует роли.
+Для этого режима имеет смысл сразу выставить `DJANGO_DEBUG=False`.
+
+### 2. Приложение + локальная PostgreSQL в Docker
+
+```bash
+cp .env.example .env
+docker compose -f compose.yml -f compose.db.yml up --build
+```
+
+Во втором режиме `compose.db.yml` сам добавляет сервис `db` и прокидывает `DATABASE_URL` в приложение.
+Для этого режима тоже лучше переключить `DJANGO_DEBUG=False`.
+
+### Автоматическое создание superuser
+
+Если нужен bootstrap администратора при запуске контейнера, включается флаг:
+
+```dotenv
+DJANGO_CREATE_SUPERUSER=True
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@example.com
+DJANGO_SUPERUSER_PASSWORD=admin
+```
+
+Если флаг выключен, суперпользователь создается обычной командой:
+
+```bash
+uv run python manage.py createsuperuser
+```
+
 ## 📚 Документация
 
 - [Руководство пользователя и роли](docs/user-guide.md)

@@ -188,6 +188,42 @@ CRM покрывает пять сущностей:
 3. не назначены ли пользователю конфликтующие точечные permissions;
 4. создан ли `superuser` для аварийного доступа.
 
+## Как создать пользователей
+
+### `Superuser`
+
+Локально:
+
+```bash
+uv run python manage.py createsuperuser
+```
+
+В Docker можно включить автоматическое создание через `.env`:
+
+```dotenv
+DJANGO_CREATE_SUPERUSER=True
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@example.com
+DJANGO_SUPERUSER_PASSWORD=admin
+```
+
+### `Operator`, `Marketer`, `Manager`
+
+Это обычные Django-пользователи с назначенной группой.
+
+Порядок:
+
+1. выполнить `uv run python manage.py sync_roles`;
+2. зайти под `superuser` в `/admin/`;
+3. открыть `Users`;
+4. создать пользователя;
+5. добавить его в одну из групп:
+   - `Operator`
+   - `Marketer`
+   - `Manager`
+
+`is_superuser` таким пользователям не нужен. `is_staff` нужен только если пользователь должен входить в Django admin.
+
 ## Сопутствующие документы
 
 - [README](../README.md) — краткая карточка репозитория;

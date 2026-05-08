@@ -331,6 +331,7 @@ DJANGO_DEBUG=True
 DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
 DATABASE_URL=
 CSRF_TRUSTED_ORIGINS=
+DJANGO_CREATE_SUPERUSER=False
 DJANGO_SUPERUSER_USERNAME=admin
 DJANGO_SUPERUSER_EMAIL=admin@example.com
 DJANGO_SUPERUSER_PASSWORD=admin
@@ -353,7 +354,7 @@ POSTGRES_PORT=5432
 - `gunicorn` как web server;
 - `whitenoise` для статики;
 - `media` через volume;
-- `entrypoint.sh` для `migrate`, `collectstatic` и, при необходимости, bootstrap-операций.
+- `entrypoint.sh` для `migrate`, `collectstatic`, `sync_roles` и, при необходимости, bootstrap-операций.
 
 ## CI/CD
 
