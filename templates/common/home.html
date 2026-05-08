@@ -1,0 +1,128 @@
+{% extends "_base.html" %}
+
+{% block title %}Главная | CRM{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <div class="col-sm-6 col-xl-3">
+        <div class="metric-card shadow-sm">
+            <div class="metric-icon bg-primary-subtle text-primary">
+                <i class="fa-solid fa-box"></i>
+            </div>
+            <div>
+                <div class="metric-label">Услуги</div>
+                <div class="metric-value">{{ products_count }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="metric-card shadow-sm">
+            <div class="metric-icon bg-warning-subtle text-warning-emphasis">
+                <i class="fa-solid fa-bullhorn"></i>
+            </div>
+            <div>
+                <div class="metric-label">Рекламные кампании</div>
+                <div class="metric-value">{{ advertisements_count }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="metric-card shadow-sm">
+            <div class="metric-icon bg-info-subtle text-info-emphasis">
+                <i class="fa-solid fa-user-clock"></i>
+            </div>
+            <div>
+                <div class="metric-label">Лиды</div>
+                <div class="metric-value">{{ leads_count }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-xl-3">
+        <div class="metric-card shadow-sm">
+            <div class="metric-icon bg-success-subtle text-success-emphasis">
+                <i class="fa-solid fa-user-check"></i>
+            </div>
+            <div>
+                <div class="metric-label">Активные клиенты</div>
+                <div class="metric-value">{{ customers_count }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="content-card shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="section-title mb-0">Разделы CRM</h2>
+                {% if perms.advertisements.view_advertisement_statistics %}
+                <a class="btn btn-outline-dark btn-sm" href="{% url 'advertisements:statistics' %}">
+                    <i class="fa-solid fa-chart-column me-2"></i>Статистика
+                </a>
+                {% endif %}
+            </div>
+            <div class="row g-3">
+                {% if perms.products.view_product %}
+                <div class="col-md-6">
+                    <a class="section-tile text-decoration-none" href="{% url 'products:list' %}">
+                        <i class="fa-solid fa-box"></i>
+                        <span>Услуги</span>
+                    </a>
+                </div>
+                {% endif %}
+                {% if perms.advertisements.view_advertisement %}
+                <div class="col-md-6">
+                    <a class="section-tile text-decoration-none" href="{% url 'advertisements:list' %}">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <span>Рекламные кампании</span>
+                    </a>
+                </div>
+                {% endif %}
+                {% if perms.leads.view_lead %}
+                <div class="col-md-6">
+                    <a class="section-tile text-decoration-none" href="{% url 'leads:list' %}">
+                        <i class="fa-solid fa-user-clock"></i>
+                        <span>Лиды</span>
+                    </a>
+                </div>
+                {% endif %}
+                {% if perms.customers.view_customer %}
+                <div class="col-md-6">
+                    <a class="section-tile text-decoration-none" href="{% url 'customers:list' %}">
+                        <i class="fa-solid fa-user-check"></i>
+                        <span>Активные клиенты</span>
+                    </a>
+                </div>
+                {% endif %}
+                {% if perms.contracts.view_contract %}
+                <div class="col-md-6">
+                    <a class="section-tile text-decoration-none" href="{% url 'contracts:list' %}">
+                        <i class="fa-solid fa-file-signature"></i>
+                        <span>Контракты</span>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="content-card shadow-sm h-100">
+            <h2 class="section-title">Сводка</h2>
+            <dl class="summary-list mb-0">
+                <div>
+                    <dt>Контракты</dt>
+                    <dd>{{ contracts_count }}</dd>
+                </div>
+                <div>
+                    <dt>Лиды</dt>
+                    <dd>{{ leads_count }}</dd>
+                </div>
+                <div>
+                    <dt>Активные клиенты</dt>
+                    <dd>{{ customers_count }}</dd>
+                </div>
+            </dl>
+        </div>
+    </div>
+</div>
+{% endblock %}

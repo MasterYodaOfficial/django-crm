@@ -1,0 +1,94 @@
+{% extends "_base.html" %}
+
+{% block title %}Лиды | CRM{% endblock %}
+
+{% block content %}
+<div class="content-card shadow-sm">
+    <div class="toolbar mb-4">
+        <div>
+            <h2 class="section-title mb-1">{{ page_title }}</h2>
+            <p class="text-body-secondary mb-0">{{ page_description }}</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <div class="count-pill">{{ records_count }} записей</div>
+            {% if perms.leads.add_lead %}
+            <a class="btn btn-dark" href="{% url 'leads:create' %}">
+                <i class="fa-solid fa-plus me-2"></i>Новый лид
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if items %}
+    <div class="table-responsive">
+        <table class="table align-middle product-table mb-0">
+            <thead>
+            <tr>
+                <th>ФИО</th>
+                <th>Телефон</th>
+                <th>Email</th>
+                <th>Кампания</th>
+                <th>Статус</th>
+                <th class="text-end">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+            <tr>
+                <td class="fw-semibold">
+                    <a class="text-decoration-none link-dark" href="{% url 'leads:detail' item.pk %}">
+                        {{ item.full_name }}
+                    </a>
+                </td>
+                <td>{{ item.phone }}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.advertisement.name }}</td>
+                <td>
+                    {% if item.converted_at %}
+                    <span class="status-badge status-badge-success">Конвертирован</span>
+                    {% else %}
+                    <span class="status-badge status-badge-muted">Не конвертирован</span>
+                    {% endif %}
+                </td>
+                <td class="text-end">
+                    <div class="d-inline-flex gap-2">
+                        <a class="btn btn-sm btn-outline-secondary" href="{% url 'leads:detail' item.pk %}">
+                            Открыть
+                        </a>
+                        {% if not item.converted_at and perms.leads.convert_lead %}
+                        <a class="btn btn-sm btn-dark" href="{% url 'leads:convert' item.pk %}">
+                            Конвертировать
+                        </a>
+                        {% elif item.converted_at and perms.customers.view_customer %}
+                        <a class="btn btn-sm btn-dark" href="{% url 'customers:detail' item.customer.pk %}">
+                            Клиент
+                        </a>
+                        {% endif %}
+                        {% if perms.leads.change_lead %}
+                        <a class="btn btn-sm btn-outline-dark" href="{% url 'leads:edit' item.pk %}">
+                            Изменить
+                        </a>
+                        {% endif %}
+                        {% if perms.leads.delete_lead %}
+                        <a class="btn btn-sm btn-outline-danger" href="{% url 'leads:delete' item.pk %}">
+                            Удалить
+                        </a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="fa-solid fa-user-clock"></i>
+        </div>
+        <div class="empty-state-title">Лиды пока не добавлены</div>
+        <div class="empty-state-text">Добавьте первого потенциального клиента, чтобы начать работу с воронкой продаж.</div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

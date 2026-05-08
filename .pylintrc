@@ -1,15 +1,18 @@
 [MASTER]
 ignore=.git,.idea,.venv,docs_private
 ignore-patterns=.*/migrations/.*
+ignore-paths=.*migrations/.*
 load-plugins=pylint_django
 django-settings-module=django_crm.settings.local
 
 [MESSAGES CONTROL]
 disable=
+    duplicate-code,
     missing-module-docstring,
     missing-class-docstring,
     missing-function-docstring,
-    too-few-public-methods
+    too-few-public-methods,
+    too-many-ancestors
 
 [FORMAT]
 max-line-length=100

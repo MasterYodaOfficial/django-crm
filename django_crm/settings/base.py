@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+from django.core.exceptions import ImproperlyConfigured
+
 import environ
 
 
@@ -9,6 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env(
     DJANGO_DEBUG=(bool, False),
+    DJANGO_REQUIRE_DATABASE_URL=(bool, False),
 )
 environ.Env.read_env(BASE_DIR / '.env')
 
@@ -28,6 +31,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.common.apps.CommonConfig',
+    'apps.products.apps.ProductsConfig',
+    'apps.advertisements.apps.AdvertisementsConfig',
+    'apps.leads.apps.LeadsConfig',
+    'apps.customers.apps.CustomersConfig',
+    'apps.contracts.apps.ContractsConfig',
 ]
 
 MIDDLEWARE = [
@@ -61,10 +69,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'django_crm.wsgi.application'
 ASGI_APPLICATION = 'django_crm.asgi.application'
 
-if env('DATABASE_URL', default=''):
+DATABASE_URL = env('DATABASE_URL', default='')
+
+if DATABASE_URL:
     DATABASES = {
         'default': env.db('DATABASE_URL'),
     }
+elif env.bool('DJANGO_REQUIRE_DATABASE_URL', default=False):
+    raise ImproperlyConfigured(
+        'DATABASE_URL must be set when DJANGO_REQUIRE_DATABASE_URL=True.',
+    )
 else:
     DATABASES = {
         'default': {

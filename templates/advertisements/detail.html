@@ -1,0 +1,70 @@
+{% extends "_base.html" %}
+
+{% block title %}{{ object.name }} | CRM{% endblock %}
+
+{% block content %}
+<div class="content-card shadow-sm">
+    <div class="toolbar mb-4">
+        <div>
+            <h2 class="section-title mb-1">{{ object.name }}</h2>
+            <p class="text-body-secondary mb-0">Карточка рекламной кампании и ее текущие параметры.</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-outline-secondary" href="{% url 'advertisements:list' %}">
+                <i class="fa-solid fa-arrow-left me-2"></i>К списку
+            </a>
+            {% if perms.advertisements.change_advertisement %}
+            <a class="btn btn-dark" href="{% url 'advertisements:edit' object.pk %}">
+                <i class="fa-solid fa-pen-to-square me-2"></i>Редактировать
+            </a>
+            {% endif %}
+            {% if perms.advertisements.delete_advertisement %}
+            <a class="btn btn-outline-danger" href="{% url 'advertisements:delete' object.pk %}">
+                <i class="fa-solid fa-trash me-2"></i>Удалить
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <div class="detail-item">
+            <div class="detail-label">Название</div>
+            <div class="detail-value">{{ object.name }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Услуга</div>
+            <div class="detail-value">{{ object.product.name }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Канал продвижения</div>
+            <div class="detail-value">{{ object.get_channel_display }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Бюджет</div>
+            <div class="detail-value">{{ object.budget }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Дата старта</div>
+            <div class="detail-value">{{ object.start_date|date:"d.m.Y"|default:"-" }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Дата завершения</div>
+            <div class="detail-value">{{ object.end_date|date:"d.m.Y"|default:"-" }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Статус</div>
+            <div class="detail-value">
+                {% if object.is_active %}
+                <span class="status-badge status-badge-success">Активна</span>
+                {% else %}
+                <span class="status-badge status-badge-muted">Неактивна</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Обновлено</div>
+            <div class="detail-value">{{ object.updated_at|date:"d.m.Y H:i" }}</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

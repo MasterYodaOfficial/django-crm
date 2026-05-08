@@ -1,5 +1,10 @@
 # Архитектура CRM
 
+См. также:
+
+- [README](../README.md)
+- [Руководство пользователя](user-guide.md)
+
 ## Зафиксированные решения
 
 - Язык: `Python 3.13`
@@ -16,11 +21,11 @@
 
 ## Почему так
 
-- `Django 5.2` это LTS-ветка, для учебно-боевого CRM это рациональнее, чем короткоживущая `6.0`.
+- `Django 5.2` это LTS-ветка, для такого CRM это рациональнее, чем короткоживущая `6.0`.
 - Для текущего ТЗ async не нужен: основная бизнес-операция это атомарная конверсия лида в активного клиента с созданием контракта, а не высокая I/O-нагрузка.
 - SQLite удобен для ранней разработки и миграций, но проект сразу проектируем так, чтобы без переделки перейти на PostgreSQL.
 - Для UI достаточно server-rendered подхода: формы, списки, карточки и навигацию делаем на Django templates с аккуратной Bootstrap-версткой без SPA-слоя.
-- Контроль качества строим вокруг `ruff`, `pylint`, `mypy` и `pytest`, а pull request в `dev` и `master` проверяем через GitHub Actions.
+- Контроль качества строим вокруг `ruff`, `pylint`, `mypy` и `pytest`.
 
 ## Целевая структура проекта
 
@@ -183,6 +188,9 @@ Contract >─── 1 Product
 - назначает permissions;
 - работает через Django admin.
 
+Преднастроенные роли создаются и синхронизируются автоматически после миграций,
+а также могут быть пересобраны вручную командой `python manage.py sync_roles`.
+
 ### Оператор
 
 - `view/add/change` для `Lead`.
@@ -323,6 +331,7 @@ DJANGO_DEBUG=True
 DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
 DATABASE_URL=
 CSRF_TRUSTED_ORIGINS=
+DJANGO_CREATE_SUPERUSER=False
 DJANGO_SUPERUSER_USERNAME=admin
 DJANGO_SUPERUSER_EMAIL=admin@example.com
 DJANGO_SUPERUSER_PASSWORD=admin
@@ -345,23 +354,15 @@ POSTGRES_PORT=5432
 - `gunicorn` как web server;
 - `whitenoise` для статики;
 - `media` через volume;
-- `entrypoint.sh` для `migrate`, `collectstatic` и, при необходимости, bootstrap-операций.
+- `entrypoint.sh` для `migrate`, `collectstatic`, `sync_roles` и, при необходимости, bootstrap-операций.
 
-## CI/CD
+## Публикация
 
-Целевой pipeline в GitHub Actions:
+Основной способ запуска проекта вне локальной разработки - Docker image:
 
-1. Установка зависимостей.
-2. `pylint`.
-3. `pytest`.
-4. Сборка Docker image.
-5. Публикация в Docker Hub.
+- `MasterYodaOfficial/django-crm`
 
-Рекомендуемая публикация:
-
-- по `main` -> тег `latest`;
-- по git tag -> семантический тег версии;
-- дополнительно тег по SHA.
+Для запуска нужен `.env` с настройками приложения и рабочим `DATABASE_URL`.
 
 ## Что не делать на первом этапе
 

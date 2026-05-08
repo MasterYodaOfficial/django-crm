@@ -1,0 +1,16 @@
+services:
+  web:
+    build:
+      context: .
+    env_file:
+      - .env
+    environment:
+      DJANGO_REQUIRE_DATABASE_URL: "true"
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    volumes:
+      - media_data:/app/media
+
+volumes:
+  media_data:

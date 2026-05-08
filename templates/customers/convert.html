@@ -1,0 +1,93 @@
+{% extends "_base.html" %}
+
+{% block title %}{{ page_title }} | CRM{% endblock %}
+
+{% block content %}
+<div class="content-card shadow-sm form-card">
+    <div class="toolbar mb-4">
+        <div>
+            <h2 class="section-title mb-1">{{ form_title }}</h2>
+            <p class="text-body-secondary mb-0">{{ page_description }}</p>
+        </div>
+        <a class="btn btn-outline-secondary" href="{% url 'customers:list' %}">
+            <i class="fa-solid fa-arrow-left me-2"></i>К списку
+        </a>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="vstack gap-4">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <label class="form-label" for="{{ form.lead.id_for_label }}">{{ form.lead.label }}</label>
+                    {{ form.lead }}
+                    {% for error in form.lead.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="{{ form.product.id_for_label }}">{{ form.product.label }}</label>
+                    {{ form.product }}
+                    {% for error in form.product.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label" for="{{ form.contract_name.id_for_label }}">{{ form.contract_name.label }}</label>
+                {{ form.contract_name }}
+                {% for error in form.contract_name.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <label class="form-label" for="{{ form.signed_at.id_for_label }}">{{ form.signed_at.label }}</label>
+                    {{ form.signed_at }}
+                    {% for error in form.signed_at.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="{{ form.valid_until.id_for_label }}">{{ form.valid_until.label }}</label>
+                    {{ form.valid_until }}
+                    {% for error in form.valid_until.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label" for="{{ form.amount.id_for_label }}">{{ form.amount.label }}</label>
+                    {{ form.amount }}
+                    {% for error in form.amount.errors %}
+                    <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div>
+                <label class="form-label" for="{{ form.document.id_for_label }}">{{ form.document.label }}</label>
+                {{ form.document }}
+                {% for error in form.document.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-actions mt-4">
+            <button class="btn btn-dark" type="submit">{{ form_action_label }}</button>
+            <a class="btn btn-outline-secondary" href="{% url 'customers:list' %}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

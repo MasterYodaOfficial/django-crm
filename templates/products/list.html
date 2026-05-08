@@ -1,0 +1,83 @@
+{% extends "_base.html" %}
+
+{% block title %}Услуги | CRM{% endblock %}
+
+{% block content %}
+<div class="content-card shadow-sm">
+    <div class="toolbar mb-4">
+        <div>
+            <h2 class="section-title mb-1">{{ page_title }}</h2>
+            <p class="text-body-secondary mb-0">{{ page_description }}</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <div class="count-pill">{{ records_count }} записей</div>
+            {% if perms.products.add_product %}
+            <a class="btn btn-dark" href="{% url 'products:create' %}">
+                <i class="fa-solid fa-plus me-2"></i>Новая услуга
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if items %}
+    <div class="table-responsive">
+        <table class="table align-middle product-table mb-0">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Стоимость</th>
+                <th>Статус</th>
+                <th class="text-end">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+            <tr>
+                <td class="fw-semibold">
+                    <a class="text-decoration-none link-dark" href="{% url 'products:detail' item.pk %}">
+                        {{ item.name }}
+                    </a>
+                </td>
+                <td class="text-body-secondary">{{ item.description|truncatechars:100 }}</td>
+                <td>{{ item.price }}</td>
+                <td>
+                    {% if item.is_active %}
+                    <span class="status-badge status-badge-success">Активна</span>
+                    {% else %}
+                    <span class="status-badge status-badge-muted">Неактивна</span>
+                    {% endif %}
+                </td>
+                <td class="text-end">
+                    <div class="d-inline-flex gap-2">
+                        <a class="btn btn-sm btn-outline-secondary" href="{% url 'products:detail' item.pk %}">
+                            Открыть
+                        </a>
+                        {% if perms.products.change_product %}
+                        <a class="btn btn-sm btn-outline-dark" href="{% url 'products:edit' item.pk %}">
+                            Изменить
+                        </a>
+                        {% endif %}
+                        {% if perms.products.delete_product %}
+                        <a class="btn btn-sm btn-outline-danger" href="{% url 'products:delete' item.pk %}">
+                            Удалить
+                        </a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="fa-regular fa-folder-open"></i>
+        </div>
+        <div class="empty-state-title">Услуги пока не добавлены</div>
+        <div class="empty-state-text">Создайте первую услугу, чтобы использовать ее в рекламных кампаниях и контрактах.</div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

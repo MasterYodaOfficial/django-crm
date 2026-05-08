@@ -1,0 +1,96 @@
+{% extends "_base.html" %}
+
+{% block title %}{{ object.full_name }} | CRM{% endblock %}
+
+{% block content %}
+<div class="content-card shadow-sm">
+    <div class="toolbar mb-4">
+        <div>
+            <h2 class="section-title mb-1">{{ object.full_name }}</h2>
+            <p class="text-body-secondary mb-0">Карточка активного клиента и его действующих контрактов.</p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-outline-secondary" href="{% url 'customers:list' %}">
+                <i class="fa-solid fa-arrow-left me-2"></i>К списку
+            </a>
+            {% if perms.contracts.add_contract %}
+            <a class="btn btn-dark" href="{% url 'contracts:create' %}?customer={{ object.pk }}">
+                <i class="fa-solid fa-file-circle-plus me-2"></i>Новый контракт
+            </a>
+            {% endif %}
+            {% if perms.customers.change_customer %}
+            <a class="btn btn-dark" href="{% url 'customers:edit' object.pk %}">
+                <i class="fa-solid fa-pen-to-square me-2"></i>Редактировать
+            </a>
+            {% endif %}
+            {% if perms.customers.delete_customer %}
+            <a class="btn btn-outline-danger" href="{% url 'customers:delete' object.pk %}">
+                <i class="fa-solid fa-trash me-2"></i>Удалить
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="detail-grid mb-4">
+        <div class="detail-item">
+            <div class="detail-label">ФИО</div>
+            <div class="detail-value">{{ object.full_name }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Телефон</div>
+            <div class="detail-value">{{ object.phone }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Email</div>
+            <div class="detail-value">{{ object.email }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Кампания</div>
+            <div class="detail-value">{{ object.lead.advertisement.name }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Услуга источника</div>
+            <div class="detail-value">{{ object.lead.advertisement.product.name }}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Дата конверсии</div>
+            <div class="detail-value">{{ object.lead.converted_at|date:"d.m.Y H:i"|default:"-" }}</div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table align-middle product-table mb-0">
+            <thead>
+            <tr>
+                <th>Контракт</th>
+                <th>Услуга</th>
+                <th>Сумма</th>
+                <th>Подписан</th>
+                <th>Действует до</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for contract in object.contracts.all %}
+            <tr>
+                <td class="fw-semibold">
+                    <a class="text-decoration-none link-dark" href="{% url 'contracts:detail' contract.pk %}">
+                        {{ contract.name }}
+                    </a>
+                </td>
+                <td>{{ contract.product.name }}</td>
+                <td>{{ contract.amount }}</td>
+                <td>{{ contract.signed_at|date:"d.m.Y" }}</td>
+                <td>{{ contract.valid_until|date:"d.m.Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center py-4 text-body-secondary">
+                    У клиента пока нет контрактов.
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

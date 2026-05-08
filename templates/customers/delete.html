@@ -1,0 +1,56 @@
+{% extends "_base.html" %}
+
+{% block title %}Удаление {{ object.full_name }} | CRM{% endblock %}
+
+{% block content %}
+<div class="content-card shadow-sm">
+    <div class="toolbar mb-4">
+        <div>
+            <h2 class="section-title mb-1">Удаление активного клиента</h2>
+            <p class="text-body-secondary mb-0">Проверьте, что действительно хотите удалить выбранного клиента.</p>
+        </div>
+        <a class="btn btn-outline-secondary" href="{% url 'customers:detail' object.pk %}">
+            <i class="fa-solid fa-arrow-left me-2"></i>Назад
+        </a>
+    </div>
+
+    {% if object.contracts.exists %}
+    <div class="alert alert-danger" role="alert">
+        У клиента уже есть контракты. Удаление недоступно, пока они не закрыты вручную.
+    </div>
+    {% else %}
+    <div class="alert alert-warning" role="alert">
+        Активный клиент <strong>{{ object.full_name }}</strong> будет удален. Лид снова станет доступен для конверсии.
+    </div>
+    {% endif %}
+
+    <dl class="summary-list mb-4">
+        <div>
+            <dt>ФИО</dt>
+            <dd>{{ object.full_name }}</dd>
+        </div>
+        <div>
+            <dt>Телефон</dt>
+            <dd>{{ object.phone }}</dd>
+        </div>
+        <div>
+            <dt>Email</dt>
+            <dd>{{ object.email }}</dd>
+        </div>
+        <div>
+            <dt>Контрактов</dt>
+            <dd>{{ object.contracts.count }}</dd>
+        </div>
+    </dl>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button class="btn btn-danger" type="submit" {% if object.contracts.exists %}disabled{% endif %}>
+                <i class="fa-solid fa-trash me-2"></i>Удалить
+            </button>
+            <a class="btn btn-outline-secondary" href="{% url 'customers:detail' object.pk %}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
