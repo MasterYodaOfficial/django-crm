@@ -1,6 +1,6 @@
 # 🚀 Django CRM
 
-Учебно-боевой CRM-проект на Django для управления услугами, рекламными кампаниями, лидами, активными клиентами и контрактами.
+CRM-проект на Django для управления услугами, рекламными кампаниями, лидами, активными клиентами и контрактами.
 
 ## ✨ Что это
 
@@ -62,32 +62,24 @@ uv run python manage.py runserver
 
 ## 🐳 Docker
 
-Есть два рабочих режима.
+Готовый образ публикуется в Docker Hub:
 
-### 1. Только приложение + внешняя PostgreSQL
+- `MasterYodaOfficial/django-crm`
 
-В `.env` нужно задать рабочий `DATABASE_URL`, после чего:
+Основной сценарий запуска:
 
-```bash
-docker compose up --build
-```
+1. подготовить `.env` с рабочим `DATABASE_URL`;
+2. запустить контейнер приложения;
+3. открыть CRM по адресу `http://127.0.0.1:8000/`.
 
-Контейнер поднимет приложение, применит миграции, соберет статику и синхронизирует роли.
-Для этого режима имеет смысл сразу выставить `DJANGO_DEBUG=False`.
-
-### 2. Приложение + локальная PostgreSQL в Docker
+Пример:
 
 ```bash
-cp .env.example .env
-docker compose -f compose.yml -f compose.db.yml up --build
+docker pull MasterYodaOfficial/django-crm:latest
+docker run --env-file .env -p 8000:8000 MasterYodaOfficial/django-crm:latest
 ```
 
-Во втором режиме `compose.db.yml` сам добавляет сервис `db` и прокидывает `DATABASE_URL` в приложение.
-Для этого режима тоже лучше переключить `DJANGO_DEBUG=False`.
-
-### Автоматическое создание superuser
-
-Если нужен bootstrap администратора при запуске контейнера, включается флаг:
+Если нужен первый администратор при запуске контейнера, можно включить:
 
 ```dotenv
 DJANGO_CREATE_SUPERUSER=True
@@ -96,45 +88,11 @@ DJANGO_SUPERUSER_EMAIL=admin@example.com
 DJANGO_SUPERUSER_PASSWORD=admin
 ```
 
-Если флаг выключен, суперпользователь создается обычной командой:
-
-```bash
-uv run python manage.py createsuperuser
-```
-
 ## 📚 Документация
 
 - [Руководство пользователя и роли](docs/user-guide.md)
 - [Архитектура проекта](docs/architecture.md)
 - [План работ / roadmap](TODO.md)
-
-## 🔄 CI/CD и Docker Hub
-
-В репозитории настроены два контура GitHub Actions:
-
-- `PR checks` — линтеры, типизация, тесты для `dev` и `master`;
-- `Docker image` — проверочная сборка образа на `pull request` и `push`, публикация образа в Docker Hub на `master` и git tags вида `v*`.
-
-Для публикации образа нужно задать в настройках репозитория:
-
-- `Variables`
-  - `DOCKERHUB_USERNAME`
-  - `DOCKERHUB_REPOSITORY`
-- `Secrets`
-  - `DOCKERHUB_TOKEN`
-
-Логика тегов:
-
-- `push` в `master` -> публикуются `latest` и `sha-<commit>`;
-- `push` тега `v1.2.3` -> публикуются `v1.2.3` и `sha-<commit>`.
-
-Пример релиза:
-
-```bash
-git checkout master
-git tag v0.1.0
-git push origin master --tags
-```
 
 ## ✅ Контроль качества
 
@@ -146,5 +104,3 @@ uv run --group dev mypy
 uv run --group dev pytest
 uv run --group dev pylint apps django_crm manage.py
 ```
-
-Для `pull request` в `dev` и `master` уже настроены автоматические проверки через GitHub Actions.
