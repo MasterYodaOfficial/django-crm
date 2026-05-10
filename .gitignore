@@ -14,3 +14,5 @@ db.sqlite3
 /.ruff_cache/
 /test_media/
 test.sqlite3
+/.coverage
+/.gigacode/
